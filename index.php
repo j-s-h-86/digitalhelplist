@@ -24,12 +24,8 @@ $router->addRoute('/admin', function () {
     require __DIR__ . '/Pages/admin.php';
 });
 
-$router->addRoute('/input', function () {
-    require __DIR__ . '/Pages/form.php';
-});
-
-$router->addRoute('/viewcustomer', function () {
-    require __DIR__ . '/Pages/viewcustomer.php';
+$router->addRoute('/helpform', function () {
+    require __DIR__ . '/Pages/helpform.php';
 });
 
 $router->addRoute('/user/login', function () {
