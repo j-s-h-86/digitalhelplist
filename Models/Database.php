@@ -1,35 +1,38 @@
 <?php
-require_once('Models/UserDatabase.php');
+require_once ('Models/UserDatabase.php');
 
 
-class DBContext{
-    private  $host = 'localhost';
-    private  $db   = 'digital';
-    private  $user = 'root';
-    private  $pass = 'hejsan123';
-    private  $charset = 'utf8mb4';
+class DBContext
+{
+
 
     private $pdo;
     private $usersDatabase;
 
-    function getUsersDatabase(){
+    function getUsersDatabase()
+    {
         return $this->usersDatabase;
     }
-    
-    function __construct() {    
-        $dsn = "mysql:host=$this->host;dbname=$this->db";
-        $this->pdo = new PDO($dsn, $this->user, $this->pass);
+
+    function __construct()
+    {
+        $host = $_ENV["host"];
+        $db = $_ENV["db"];
+        $user = $_ENV["user"];
+        $pass = $_ENV["pass"];
+        $dsn = "mysql:host=$host;dbname=$db";
+        $this->pdo = new PDO($dsn, $user, $pass);
         $this->usersDatabase = new UserDatabase($this->pdo);
         //$this->initIfNotInitialized();
         //$this->seedfNotSeeded();
     }
 
-//     function getAllOffices(){
+    //     function getAllOffices(){
 //         return $this->pdo->query('SELECT * FROM Office')->fetchAll(PDO::FETCH_CLASS, 'Office');
-        
-//     }
-    
-//     function searchCustomers($sortCol, $sortOrder, $q,$categoryId){
+
+    //     }
+
+    //     function searchCustomers($sortCol, $sortOrder, $q,$categoryId){
 //         if($sortCol == null){
 //             $sortCol = "Id";
 //         }
@@ -61,22 +64,22 @@ class DBContext{
 //                 $sql = $sql . " AND ";    
 //             }
 
-//             $sql = $sql . " ( OfficeId = :categoryId )";        
+    //             $sql = $sql . " ( OfficeId = :categoryId )";        
 //             $paramsArray["categoryId"] = $categoryId;                
 //         }
 
-        
-//         $sql .= " ORDER BY $sortCol $sortOrder ";    
 
-//         $prep = $this->pdo->prepare($sql);
+    //         $sql .= " ORDER BY $sortCol $sortOrder ";    
+
+    //         $prep = $this->pdo->prepare($sql);
 //         $prep->setFetchMode(PDO::FETCH_CLASS,'Customer');
 //         $prep->execute($paramsArray);
 
 
-//         return $prep->fetchAll();        
+    //         return $prep->fetchAll();        
 //     }
 
-//  function getCustomer($id){
+    //  function getCustomer($id){
 //         $prep = $this->pdo->prepare('SELECT * FROM Customer where id=:id');
 //         $prep->setFetchMode(PDO::FETCH_CLASS,'Customer');
 //         $prep->execute(['id'=> $id]);
@@ -89,7 +92,7 @@ class DBContext{
 //         return  $prep->fetch();
 //     }
 
-//     function getOfficeByName($title) {
+    //     function getOfficeByName($title) {
 //         $prep = $this->pdo->prepare('SELECT * FROM Office where name=:title');
 //         $prep->setFetchMode(PDO::FETCH_CLASS,'Office');
 //         $prep->execute(['title'=> $title]); 
@@ -97,7 +100,7 @@ class DBContext{
 //     }
 
 
-//     function getOffice($id) {
+    //     function getOffice($id) {
 //         $prep = $this->pdo->prepare('SELECT * FROM Office where id=:id');
 //         $prep->setFetchMode(PDO::FETCH_CLASS,'Office');
 //         $prep->execute(['id'=> $id]); 
@@ -107,13 +110,13 @@ class DBContext{
 
 
 
-//     function seedfNotSeeded(){
+    //     function seedfNotSeeded(){
 //         static $seeded = false;
 //         if($seeded) return;
 
-//         $offices = $this->getAllOffices();
-        
-//         $this->createIfNotExisting('Julianna','Castle','3759 Cordova Lane','Ypsilanti','48197','USA','US','1974-12-17 00:00:00','19741217-3496',55,'(971)360-3873','lindy@eaqui.edu',$offices[array_rand($offices)]->Id);
+    //         $offices = $this->getAllOffices();
+
+    //         $this->createIfNotExisting('Julianna','Castle','3759 Cordova Lane','Ypsilanti','48197','USA','US','1974-12-17 00:00:00','19741217-3496',55,'(971)360-3873','lindy@eaqui.edu',$offices[array_rand($offices)]->Id);
 //         $this->createIfNotExisting('Milo','Land','8958 Laurie Parkway','Chicago Heights','60412','USA','US','1943-04-02 00:00:00','19430402-4486',55,'(571)598-7757','i.hite@doloreum.gov',$offices[array_rand($offices)]->Id);
 //         $this->createIfNotExisting('Augustine','Serna','8694 Sandy Port Way','Knoxville','37940','USA','US','1982-08-12 00:00:00','19820812-3406',55,'(989)588-5810','roxann.nowak@ipsumcommodoconsequat.org',$offices[array_rand($offices)]->Id);
 //         $this->createIfNotExisting('Gayle','Courtney','9760 Keystone Drive','Manchester','37349','USA','US','1984-12-26 00:00:00','19841226-6011',55,'(980)777-7087','eileen@nullaadipiscing.gov',$offices[array_rand($offices)]->Id);
@@ -274,29 +277,29 @@ class DBContext{
 //         $this->createIfNotExisting('Shannon','Cline','1694 Nelson Way','Honeoye','14471','USA','US','1970-11-16 00:00:00','19701116-3749',55,'(878)706-2672','j.hairston@ametaccumsan.gov',$offices[array_rand($offices)]->Id);
 //         $this->createIfNotExisting('Lamar','Mcclendon','8654 Wilchester Drive','White Oak','28399','USA','US','2004-02-17 00:00:00','20040217-3761',55,'(303)244-3798','nereida@nostrudconsequat.eu',$offices[array_rand($offices)]->Id);
 //         $this->createIfNotExisting('Rodrigo','Stack','3243 Meadow Wood Cove','Mobile','36609','USA','US','1953-02-01 00:00:00','19530201-6011',55,'(508)745-9798','serena@nullapraesent.eu',$offices[array_rand($offices)]->Id);
-        
 
-//         $seeded = true;
 
-//     }
+    //         $seeded = true;
 
-//     function createIfNotExisting($givenname, $surname,$Streetaddress, $City, $Zipcode, $Country, $CountryCode, $Birthday, $NationalId, $TelephoneCountryCode, $Telephone, $EmailAddress, $OfficeId){
+    //     }
+
+    //     function createIfNotExisting($givenname, $surname,$Streetaddress, $City, $Zipcode, $Country, $CountryCode, $Birthday, $NationalId, $TelephoneCountryCode, $Telephone, $EmailAddress, $OfficeId){
 //         $existing = $this->getCustomerByNames($givenname, $surname);
 //         if($existing){
 //             return;
 //         };
 //         return $this->addCustomer($givenname, $surname,$Streetaddress, $City, $Zipcode, $Country, $CountryCode, $Birthday, $NationalId, $TelephoneCountryCode, $Telephone, $EmailAddress, $OfficeId);
 
-//     }
+    //     }
 
-//     function addOffice($name,$streetAddress,$city, $Zipcode){
+    //     function addOffice($name,$streetAddress,$city, $Zipcode){
 //         $prep = $this->pdo->prepare('INSERT INTO Office (Name,StreetAddress, City,Zipcode) VALUES(:name,:streetAddress, :city, :zipcode )');
 //         $prep->execute(["name"=>$name,"streetAddress"=>$streetAddress,"city"=>$city,"zipcode"=>$Zipcode]);
 //         return $this->pdo->lastInsertId();
 //     }
 
 
-//     function updateCustomer($id, $givenname, $surname,$Streetaddress, $City, $Zipcode, $Country, $CountryCode, $Birthday, $NationalId, $TelephoneCountryCode, $Telephone, $EmailAddress, $OfficeId){
+    //     function updateCustomer($id, $givenname, $surname,$Streetaddress, $City, $Zipcode, $Country, $CountryCode, $Birthday, $NationalId, $TelephoneCountryCode, $Telephone, $EmailAddress, $OfficeId){
 //         $prep = $this->pdo->prepare("UPDATE  Customer SET
 //                         GivenName=:GivenName, Surname=:Surname, Streetaddress=:Streetaddress, 
 //                         City=:City, Zipcode=:Zipcode, Country=:Country, CountryCode=:CountryCode, Birthday=:Birthday, 
@@ -308,13 +311,13 @@ class DBContext{
 //             "Zipcode"=>$Zipcode,"Country"=>$Country,
 //             "CountryCode"=>$CountryCode,"Birthday"=>$Birthday,"NationalId"=>$NationalId,"TelephoneCountryCode"=>$TelephoneCountryCode,
 //             "Telephone"=>$Telephone,"EmailAddress"=>$EmailAddress,"OfficeId"=>$OfficeId,"id"=>$id]);
-                  
-//     }
+
+    //     }
 
 
 
 
-//     function addCustomer($givenname, $surname,$Streetaddress, $City, $Zipcode, $Country, $CountryCode, $Birthday, $NationalId, $TelephoneCountryCode, $Telephone, $EmailAddress, $OfficeId){
+    //     function addCustomer($givenname, $surname,$Streetaddress, $City, $Zipcode, $Country, $CountryCode, $Birthday, $NationalId, $TelephoneCountryCode, $Telephone, $EmailAddress, $OfficeId){
 //         $prep = $this->pdo->prepare("INSERT INTO Customer
 //                         (GivenName, Surname, Streetaddress, City, Zipcode, Country, CountryCode, Birthday, NationalId, TelephoneCountryCode, Telephone, EmailAddress, OfficeId)
 //                     VALUES(:GivenName, :Surname, :Streetaddress, :City, :Zipcode, :Country, :CountryCode, :Birthday, :NationalId, :TelephoneCountryCode, :Telephone, :EmailAddress, :OfficeId);
@@ -324,16 +327,16 @@ class DBContext{
 //             "CountryCode"=>$CountryCode,"Birthday"=>$Birthday,"NationalId"=>$NationalId,"TelephoneCountryCode"=>$TelephoneCountryCode,
 //             "Telephone"=>$Telephone,"EmailAddress"=>$EmailAddress,"OfficeId"=>$OfficeId]);
 //         return $this->pdo->lastInsertId();
-                   
-//     }
 
-//     function initIfNotInitialized() {
+    //     }
 
-//         static $initialized = false;
+    //     function initIfNotInitialized() {
+
+    //         static $initialized = false;
 //         if($initialized) return;
 
 
-//         $sql  ="CREATE TABLE IF NOT EXISTS `Office` (
+    //         $sql  ="CREATE TABLE IF NOT EXISTS `Office` (
 //             `Id` INT AUTO_INCREMENT NOT NULL,
 //             `Name` varchar(200) NOT NULL,
 //             `StreetAddress` varchar(200) NOT NULL,
@@ -342,7 +345,7 @@ class DBContext{
 //             PRIMARY KEY (`id`)
 //             ) ";
 
-//         $this->pdo->exec($sql);
+    //         $this->pdo->exec($sql);
 //         if(!$this->getOfficeByName("Stiedermann")){
 //             $this->addOffice("Stiedermann","74454 Vandervort Shore","Mullerbury","42160");
 //         }
@@ -359,7 +362,7 @@ class DBContext{
 //             $this->addOffice("Ritchie","96163 Kreiger Cape","Lambertberg","76287-7180");
 //         }
 
-//         $sql  ="CREATE TABLE IF NOT EXISTS `Customer` (
+    //         $sql  ="CREATE TABLE IF NOT EXISTS `Customer` (
 //             `Id` int NOT NULL AUTO_INCREMENT,
 //             `GivenName` varchar(50) NOT NULL,
 //             `Surname` varchar(50) NOT NULL,
@@ -379,13 +382,13 @@ class DBContext{
 //                 REFERENCES Office(id)
 //           ) ";
 
-//         $this->pdo->exec($sql);
+    //         $this->pdo->exec($sql);
 
 
-//         $this->usersDatabase->setupUsers();
+    //         $this->usersDatabase->setupUsers();
 //         $this->usersDatabase->seedUsers();
 
-//         $initialized = true;
+    //         $initialized = true;
 //     }
 
 
