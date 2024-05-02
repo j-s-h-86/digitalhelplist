@@ -294,11 +294,12 @@ class DBContext
 
     //     }
 
-    //     function addOffice($name,$streetAddress,$city, $Zipcode){
-//         $prep = $this->pdo->prepare('INSERT INTO Office (Name,StreetAddress, City,Zipcode) VALUES(:name,:streetAddress, :city, :zipcode )');
-//         $prep->execute(["name"=>$name,"streetAddress"=>$streetAddress,"city"=>$city,"zipcode"=>$Zipcode]);
-//         return $this->pdo->lastInsertId();
-//     }
+    function addHelpRequest($StudentName, $Email, $Location, $Question, $Active)
+    {
+        $prep = $this->pdo->prepare('INSERT INTO helplist (StudentName, Email, Location, Question, Active) VALUES(:StudentName,:Email, :Location, :Question, :Active )');
+        $prep->execute(["StudentName" => $StudentName, "Email" => $Email, "Location" => $Location, "Question" => $Question, "Active" => $Active]);
+        return $this->pdo->lastInsertId();
+    }
 
 
     //     function updateCustomer($id, $givenname, $surname,$Streetaddress, $City, $Zipcode, $Country, $CountryCode, $Birthday, $NationalId, $TelephoneCountryCode, $Telephone, $EmailAddress, $OfficeId){
@@ -346,7 +347,7 @@ class DBContext
             `Email` varchar(200) NOT NULL,
             `Location` varchar(200) NOT NULL,
             `Question` varchar(400) NOT NULL,
-            `Active`boolean NOT NULL,
+            `Active` BOOLEAN DEFAULT TRUE,
             PRIMARY KEY (`id`)
             ) ";
 
