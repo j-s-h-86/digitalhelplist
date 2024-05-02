@@ -25,7 +25,7 @@ class DBContext
         $this->usersDatabase = new UserDatabase($this->pdo);
         $this->usersDatabase->setupUsers();
         $this->usersDatabase->seedUsers();
-        //$this->initIfNotInitialized();
+        $this->initIfNotInitialized();
         //$this->seedfNotSeeded();
     }
 
@@ -332,39 +332,26 @@ class DBContext
 
     //     }
 
-    //     function initIfNotInitialized() {
+    function initIfNotInitialized()
+    {
 
-    //         static $initialized = false;
-//         if($initialized) return;
+        static $initialized = false;
+        if ($initialized)
+            return;
 
 
-    //         $sql  ="CREATE TABLE IF NOT EXISTS `Office` (
-//             `Id` INT AUTO_INCREMENT NOT NULL,
-//             `Name` varchar(200) NOT NULL,
-//             `StreetAddress` varchar(200) NOT NULL,
-//             `City` varchar(200) NOT NULL,
-//             `Zipcode` varchar(200) NOT NULL,
-//             PRIMARY KEY (`id`)
-//             ) ";
+        $sql = "CREATE TABLE IF NOT EXISTS `helplist` (
+            `Id` INT AUTO_INCREMENT NOT NULL,
+            `StudentName` varchar(200) NOT NULL,
+            `Email` varchar(200) NOT NULL,
+            `Location` varchar(200) NOT NULL,
+            `Question` varchar(400) NOT NULL,
+            `Active`boolean NOT NULL,
+            PRIMARY KEY (`id`)
+            ) ";
 
-    //         $this->pdo->exec($sql);
-//         if(!$this->getOfficeByName("Stiedermann")){
-//             $this->addOffice("Stiedermann","74454 Vandervort Shore","Mullerbury","42160");
-//         }
-//         if(!$this->getOfficeByName("Mckenna Huel DDS")){
-//             $this->addOffice("Mckenna Huel DDS","888 Kenyon Light","D'Amorehaven","48043");
-//         }
-//         if(!$this->getOfficeByName("Cartwright")){
-//             $this->addOffice("Cartwright","936 Kiehn Route","West Ned","11230");
-//         }
-//         if(!$this->getOfficeByName("Mayert")){
-//             $this->addOffice("Mayert","4059 Carling Avenue","Ottawa","WE-QQQ1-123");
-//         }
-//         if(!$this->getOfficeByName("Ritchie")){
-//             $this->addOffice("Ritchie","96163 Kreiger Cape","Lambertberg","76287-7180");
-//         }
 
-    //         $sql  ="CREATE TABLE IF NOT EXISTS `Customer` (
+        //         $sql  ="CREATE TABLE IF NOT EXISTS `Customer` (
 //             `Id` int NOT NULL AUTO_INCREMENT,
 //             `GivenName` varchar(50) NOT NULL,
 //             `Surname` varchar(50) NOT NULL,
@@ -384,14 +371,14 @@ class DBContext
 //                 REFERENCES Office(id)
 //           ) ";
 
-    //         $this->pdo->exec($sql);
+        $this->pdo->exec($sql);
 
 
-    //         $this->usersDatabase->setupUsers();
+        //         $this->usersDatabase->setupUsers();
 //         $this->usersDatabase->seedUsers();
 
-    //         $initialized = true;
-//     }
+        //         $initialized = true;
+    }
 
 
 }
