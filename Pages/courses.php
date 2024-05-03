@@ -46,7 +46,7 @@ $dbContext = new DBContext();
 
 
 
-layout_header("Stefans Bank");
+layout_header("MI:s Handlednings-app");
 ?>
 
 
@@ -60,14 +60,18 @@ layout_header("Stefans Bank");
     <!------------------main-------------->
     <main>
         <?php
+        if ($dbContext->getUsersDatabase()->getAuth()->hasRole(UserRoles::TEACHER)) {
+            echo "<p>Här är lärarens kurser.</p>";
+        }
+        ?>
+        <?php
         if ($dbContext->getUsersDatabase()->getAuth()->hasRole(UserRoles::STUDENT)) {
-            ?>
-            <p>Här är ditt schema.</p>
-            <?php
-        } else {
-            ?>
-            <p>Endast för inloggade studenter.</p>
-            <?php
+            echo "<p>Här är elevens kurser.</p>";
+        }
+        ?>
+        <?php
+        if (!$dbContext->getUsersDatabase()->getAuth()->isLoggedIn()) {
+            echo "<p>Du måste vara inloggad för att se dina kurser.</p>";
         }
         ?>
     </main>

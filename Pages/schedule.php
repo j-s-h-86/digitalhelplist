@@ -60,14 +60,18 @@ layout_header("MI Handledningsapp")
     <!------------------main-------------->
     <main>
         <?php
+        if ($dbContext->getUsersDatabase()->getAuth()->hasRole(UserRoles::TEACHER)) {
+            echo "<p>Här är lärarens schema.</p>";
+        }
+        ?>
+        <?php
         if ($dbContext->getUsersDatabase()->getAuth()->hasRole(UserRoles::STUDENT)) {
-            ?>
-            <p>Här är alla dina kurser.</p>
-            <?php
-        } else {
-            ?>
-            <p>Endast för inloggade studenter.</p>
-            <?php
+            echo "<p>Här är elevens schema.</p>";
+        }
+        ?>
+        <?php
+        if (!$dbContext->getUsersDatabase()->getAuth()->isLoggedIn()) {
+            echo "<p>Du måste vara inloggad för att se ditt schema.</p>";
         }
         ?>
     </main>
