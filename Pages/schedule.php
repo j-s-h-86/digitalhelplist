@@ -1,9 +1,9 @@
 <?php
 require 'vendor/autoload.php';
-require_once("Models/Database.php");
-require_once("Pages/layout/header.php");
-require_once("Pages/layout/sidenav.php");
-require_once("Pages/layout/footer.php");
+require_once ("Models/Database.php");
+require_once ("Pages/layout/header.php");
+require_once ("Pages/layout/sidenav.php");
+require_once ("Pages/layout/footer.php");
 
 $sortOrder = $_GET['sortOrder'] ?? "";
 $sortCol = $_GET['sortCol'] ?? "";
@@ -46,21 +46,31 @@ $dbContext = new DBContext();
 
 
 
-layout_header("Stefans Bank");
-?>
+layout_header("MI Handledningsapp")
+    ?>
 
 
 <body>
 
 
-<!------------------sidenav-------------->
-<?php
-layout_sidenav($dbContext);
-?>
-<!------------------main-------------->
-<main>
-    Endast student
-</main>
+    <!------------------sidenav-------------->
+    <?php
+    layout_sidenav($dbContext);
+    ?>
+    <!------------------main-------------->
+    <main>
+        <?php
+        if ($dbContext->getUsersDatabase()->getAuth()->hasRole(UserRoles::STUDENT)) {
+            ?>
+            <p>Här är alla dina kurser.</p>
+            <?php
+        } else {
+            ?>
+            <p>Endast för inloggade studenter.</p>
+            <?php
+        }
+        ?>
+    </main>
 
 </body>
 

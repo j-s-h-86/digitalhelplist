@@ -28,11 +28,23 @@ $router->addRoute('/helpform', function () {
     require __DIR__ . '/Pages/helpform.php';
 });
 
-$router->addRoute('/user/login', function () {
+// $router->addRoute('/helplist', function () {
+//     require __DIR__ . '/Pages/helplist.php';
+// });
+
+$router->addRoute('/courses', function () {
+    require __DIR__ . '/Pages/courses.php';
+});
+
+$router->addRoute('/schedule', function () {
+    require __DIR__ . '/Pages/schedule.php';
+});
+
+$router->addRoute('/users/login', function () {
     require (__DIR__ . '/Pages/users/login.php');
 });
 
-$router->addRoute('/user/logout', function () {
+$router->addRoute('/users/logout', function () {
     require (__DIR__ . '/Pages/users/logout.php');
 });
 

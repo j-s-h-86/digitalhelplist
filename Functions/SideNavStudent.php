@@ -3,32 +3,32 @@
 function sideNavStudent($dbContext)
 {
 
-    if ($dbContext->getUsersDatabase()->getAuth()->hasRole(UserRoles::TEACHER)) {
+    if ($dbContext->getUsersDatabase()->getAuth()->hasRole(UserRoles::STUDENT)) {
         ?>
         <li class="line-split"></li>
         <li>
-            <a href="/student">
+            <a href="/courses">
                 <span class="sidebar-icon"><i class="fas fa-calendar"></i></span>
                 <span class="sidebar-text">Kurser</span>
             </a>
         </li>
         <li class="line-split"></li>
         <li>
-            <a href="/student">
+            <a href="/schedule">
                 <span class="sidebar-icon"><i class="fas fa-calendar"></i></span>
                 <span class="sidebar-text">Schema</span>
             </a>
         </li>
         <li class="line-split"></li>
         <li>
-            <a href="/student">
+            <a href="/helpform">
                 <span class="sidebar-icon"><i class="fas fa-calendar"></i></span>
-                <span class="sidebar-text">Kölista för handledning</span>
+                <span class="sidebar-text">Skicka handledningsförfrågan</span>
             </a>
         </li>
         <li class="line-split"></li>
         <li>
-            <a href="/student">
+            <a href="/profile">
                 <span class="sidebar-icon"><i class="fas fa-calendar"></i></span>
                 <span class="sidebar-text">Min profil</span>
             </a>

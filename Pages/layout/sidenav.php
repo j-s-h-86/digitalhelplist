@@ -1,4 +1,6 @@
 <?php
+require_once ('Functions/SideNavStudent.php');
+require_once ('Functions/SideNavTeacher.php');
 function layout_sidenav($dbContext)
 {
     ?>
@@ -15,14 +17,14 @@ function layout_sidenav($dbContext)
                         <?php
                         if (!$dbContext->getUsersDatabase()->getAuth()->isLoggedIn()) {
                             ?>
-                            <a href="/user/login">
+                            <a href="/users/login">
                                 <i class="fas fa-sign-out-alt"></i>
                                 Logga in
                             </a>
                             <?php
                         } else {
                             ?>
-                            <a href="/user/logout">
+                            <a href="/users/logout">
                                 <i class="fas fa-sign-out-alt"></i>
                                 Logga ut
                             </a>
@@ -46,26 +48,10 @@ function layout_sidenav($dbContext)
                         <span class="sidebar-text"> Start</span>
                     </a>
                 </li>
-                <li>
-                    <a href="/admin">
-                        <span class="sidebar-icon"><i class="fas fa-calendar"></i></span>
-                        <span class="sidebar-text"> Admin bla bla</span>
-                    </a>
-                </li>
-                <li class="line-split"></li>
-                <li>
-                    <a href="/student">
-                        <span class="sidebar-icon"><i class="fas fa-calendar"></i></span>
-                        <span class="sidebar-text"> Student bla bla</span>
-                    </a>
-                </li>
-                <li class="line-split"></li>
-                <li>
-                    <a href="/helpform">
-                        <span class="sidebar-icon"><i class="fas fa-calendar"></i></span>
-                        <span class="sidebar-text"> Handledning</span>
-                    </a>
-                </li>
+                <?php sideNavTeacher($dbContext); ?>
+
+                <?php sideNavStudent($dbContext); ?>
+
                 <li class="line-split"></li>
                 <li>
                     <a href="/public">
@@ -79,6 +65,6 @@ function layout_sidenav($dbContext)
 
     </nav>
 
-<?php
+    <?php
 }
 ?>
