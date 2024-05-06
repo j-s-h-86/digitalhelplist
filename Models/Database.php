@@ -1,5 +1,7 @@
 <?php
 require_once ('Models/UserDatabase.php');
+require_once ('Models/HelpRequest.php');
+require_once ('Models/GetHelpRequest.php');
 
 
 class DBContext
@@ -29,10 +31,12 @@ class DBContext
         //$this->seedfNotSeeded();
     }
 
-    //     function getAllOffices(){
-//         return $this->pdo->query('SELECT * FROM Office')->fetchAll(PDO::FETCH_CLASS, 'Office');
+    function getAllHelpRequest()
+    {
 
-    //     }
+        return $this->pdo->query('SELECT * FROM helplist ORDER BY Id')->fetchAll(PDO::FETCH_CLASS, 'GetHelpRequest');
+
+    }
 
     //     function searchCustomers($sortCol, $sortOrder, $q,$categoryId){
 //         if($sortCol == null){
@@ -81,13 +85,14 @@ class DBContext
     //         return $prep->fetchAll();        
 //     }
 
-    //  function getCustomer($id){
-//         $prep = $this->pdo->prepare('SELECT * FROM Customer where id=:id');
-//         $prep->setFetchMode(PDO::FETCH_CLASS,'Customer');
-//         $prep->execute(['id'=> $id]);
-//         return  $prep->fetch();
-//     }
-//     function getCustomerByNames($GivenName,$Surname){
+    function getHelpRequest($Id, $StudentName, $Email, $Location, $Question, $Active)
+    {
+        $prep = $this->pdo->prepare('SELECT * FROM helplist where Id=:Id');
+        $prep->setFetchMode(PDO::FETCH_CLASS, 'HelpRequest');
+        $prep->execute(['Id' => $Id]);
+        return $prep->fetch();
+    }
+    //     function getCustomerByNames($GivenName,$Surname){
 //         $prep = $this->pdo->prepare('SELECT * FROM Customer where GivenName=:givenname and Surname=:surname');
 //         $prep->setFetchMode(PDO::FETCH_CLASS,'Customer');
 //         $prep->execute(['givenname'=> $GivenName, 'surname' => $Surname]); 
@@ -302,20 +307,14 @@ class DBContext
     }
 
 
-    //     function updateCustomer($id, $givenname, $surname,$Streetaddress, $City, $Zipcode, $Country, $CountryCode, $Birthday, $NationalId, $TelephoneCountryCode, $Telephone, $EmailAddress, $OfficeId){
-//         $prep = $this->pdo->prepare("UPDATE  Customer SET
-//                         GivenName=:GivenName, Surname=:Surname, Streetaddress=:Streetaddress, 
-//                         City=:City, Zipcode=:Zipcode, Country=:Country, CountryCode=:CountryCode, Birthday=:Birthday, 
-//                         NationalId=:NationalId,TelephoneCountryCode=:TelephoneCountryCode,Telephone=:Telephone,
-//                         EmailAddress=:EmailAddress,OfficeId=:OfficeId
-//                         WHERE id=:id;
-//         ");
-//         $prep->execute(["GivenName"=>$givenname,"Surname"=>$surname,"Streetaddress"=>$Streetaddress,"City"=>$City,
-//             "Zipcode"=>$Zipcode,"Country"=>$Country,
-//             "CountryCode"=>$CountryCode,"Birthday"=>$Birthday,"NationalId"=>$NationalId,"TelephoneCountryCode"=>$TelephoneCountryCode,
-//             "Telephone"=>$Telephone,"EmailAddress"=>$EmailAddress,"OfficeId"=>$OfficeId,"id"=>$id]);
+    function updateHelpRequest($Id)
+    {
+        $prep = $this->pdo->prepare("UPDATE helplist SET `Active` = 0 WHERE Id=:Id");
+        $prep->execute(["Id" => $Id]);
 
-    //     }
+
+
+    }
 
 
 
@@ -347,7 +346,7 @@ class DBContext
             `Email` varchar(200) NOT NULL,
             `Location` varchar(200) NOT NULL,
             `Question` varchar(400) NOT NULL,
-            `Active` BOOLEAN DEFAULT TRUE,
+            `Active` BOOLEAN DEFAULT 1,
             PRIMARY KEY (`id`)
             ) ";
 

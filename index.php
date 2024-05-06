@@ -27,6 +27,9 @@ $router->addRoute('/admin', function () {
 $router->addRoute('/helpform', function () {
     require __DIR__ . '/Pages/helpform.php';
 });
+$router->addRoute('/helplist', function () {
+    require __DIR__ . '/Pages/helplist.php';
+});
 
 $router->addRoute('/user/login', function () {
     require (__DIR__ . '/Pages/users/login.php');
