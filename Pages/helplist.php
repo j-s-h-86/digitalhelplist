@@ -48,8 +48,20 @@ layout_header("Helplist")
                 <li><?php echo $helpRequest->Id ?>
                 </li>
 
-                <button id="updateRequest" type="submit"
-                    onclick="javascript:updateHelpRequest(<?php echo $helpRequest->Id ?>)">Help</button>
+                <?php
+
+                if ($helpRequest->Active) {
+                    ?>
+
+                    <button id="updateRequest" type="submit"
+                        onclick="javascript:updateHelpRequest(<?php echo $helpRequest->Id ?>)">Help</button>
+                    <?php
+                } else {
+                    ?>
+                    <button disabled>Done</button>
+                    <?php
+                }
+                ?>
                 <?php
             }
             ?>
