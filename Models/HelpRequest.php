@@ -9,9 +9,6 @@ class HelpRequest
     public $Question;
     public $Active;
 
-    function __construct()
-    {
-        $this->Active = true;
-    }
+
 
 }

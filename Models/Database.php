@@ -1,7 +1,7 @@
 <?php
 require_once ('Models/UserDatabase.php');
 require_once ('Models/HelpRequest.php');
-require_once ('Models/GetHelpRequest.php');
+
 
 
 class DBContext
@@ -34,7 +34,7 @@ class DBContext
     function getAllHelpRequest()
     {
 
-        return $this->pdo->query('SELECT * FROM helplist ORDER BY Id')->fetchAll(PDO::FETCH_CLASS, 'GetHelpRequest');
+        return $this->pdo->query('SELECT * FROM helplist ORDER BY Id')->fetchAll(PDO::FETCH_CLASS, 'HelpRequest');
 
     }
 
