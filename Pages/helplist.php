@@ -16,6 +16,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 <?php
 layout_header("Helplist")
     ?>
+<script>
+    async function updateHelpRequest(id) {
+        const updateHelpRequest = await (await fetch(`/updateHelpRequest?id=${id}`))
+        document.getElementById("updateRequest").disabled = true;
+        header("Location: /helplist");
+        exit;
+    }
+</script>
 
 <body>
     <?php
@@ -40,20 +48,8 @@ layout_header("Helplist")
                 <li><?php echo $helpRequest->Id ?>
                 </li>
 
-                <?php
-
-                if ($helpRequest->Active) {
-                    ?>
-                    <button type="submit" <?php $dbContext->updateHelpRequest($Id) ?>><a
-                            href='helplist?id=<?php echo $helpRequest->Id ?>'>Help</a></button>
-                    <?php
-
-                } else {
-                    ?>
-                    <button disabled>Done</button>
-                    <?php
-                }
-                ?>
+                <button id="updateRequest" type="submit"
+                    onclick="javascript:updateHelpRequest(<?php echo $helpRequest->Id ?>)">Help</button>
                 <?php
             }
             ?>

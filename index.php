@@ -31,9 +31,9 @@ $router->addRoute('/helplist', function () {
     require __DIR__ . '/Pages/helplist.php';
 });
 
-// $router->addRoute('/helplist', function () {
-//     require __DIR__ . '/Pages/helplist.php';
-// });
+$router->addRoute('/updateHelpRequest', function () {
+    require __DIR__ . '/Functions/UpdateHelpRequest.php';
+});
 
 $router->addRoute('/courses', function () {
     require __DIR__ . '/Pages/courses.php';
