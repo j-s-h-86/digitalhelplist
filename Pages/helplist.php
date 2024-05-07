@@ -34,7 +34,7 @@ layout_header("Helplist")
 
             <?php foreach ($dbContext->getAllHelpRequest() as $helpRequest) { ?>
                 <br>
-                <?php var_dump($helpRequest) ?>
+
                 <li value><?php echo $helpRequest->StudentName ?>
                 </li>
                 <li><?php echo $helpRequest->Email ?>

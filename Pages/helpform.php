@@ -16,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $HelpRequest->Email = $_POST["Email"];
     $HelpRequest->Location = $_POST["Location"];
     $HelpRequest->Question = $_POST["Question"];
+    $HelpRequest->Active = 1;
 
 
     // $v->field('Email')->required()->email();
@@ -27,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $HelpRequest->Question,
         $HelpRequest->Active,
     );
-    header("Location: /users/login");
+    header("Location: /sentrequest");
     exit;
 } else {
     $message = "FIXA FEL";
