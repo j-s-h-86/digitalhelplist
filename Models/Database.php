@@ -85,11 +85,13 @@ class DBContext
     //         return $prep->fetchAll();        
 //     }
 
-    function getHelpRequest($Id, $StudentName, $Email, $Location, $Question, $Active)
+    function getHelpRequest($Email)
     {
-        $prep = $this->pdo->prepare('SELECT * FROM helplist where Id=:Id');
+        $prep = $this->pdo->prepare('SELECT * FROM helplist where Email=' . $Email . ' and Active=1');
         $prep->setFetchMode(PDO::FETCH_CLASS, 'HelpRequest');
-        $prep->execute(['Id' => $Id]);
+        $prep->execute(['Email' => $Email]);
+        // $query = 'SELECT * FROM helplist WHERE Email=' . $Email . ' AND Active=1';
+        // return $this->pdo->exec($query);
         return $prep->fetch();
     }
     //     function getCustomerByNames($GivenName,$Surname){
