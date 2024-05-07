@@ -28,7 +28,7 @@ class DBContext
         $this->usersDatabase->setupUsers();
         $this->usersDatabase->seedUsers();
         $this->initIfNotInitialized();
-        //$this->seedfNotSeeded();
+        $this->seedIfNotSeeded();
     }
 
     function getAllHelpRequest()
@@ -39,22 +39,22 @@ class DBContext
     }
 
     //     function searchCustomers($sortCol, $sortOrder, $q,$categoryId){
-//         if($sortCol == null){
-//             $sortCol = "Id";
-//         }
-//         if($sortOrder == null){
-//             $sortOrder = "asc";
-//         }
-//         $sql = "SELECT * FROM Customer ";
-//         $paramsArray = [];
-//         $addedWhere = false;
-//         if($q != null && strlen($q) > 0){  // Omman angett ett q - WHERE   tef
+    //         if($sortCol == null){
+    //             $sortCol = "Id";
+    //         }
+    //         if($sortOrder == null){
+    //             $sortOrder = "asc";
+    //         }
+    //         $sql = "SELECT * FROM Customer ";
+    //         $paramsArray = [];
+    //         $addedWhere = false;
+    //         if($q != null && strlen($q) > 0){  // Omman angett ett q - WHERE   tef
 //                 // select * from product where title like '%tef%' // Stefan  tefan atef
 //             if(!$addedWhere){
 //                 $sql = $sql . " WHERE ";            
 //                 $addedWhere = true;
 //             }else{
-//                 $sql = $sql . " AND ";    
+    //                 $sql = $sql . " AND ";    
 //             }
 //             $sql = $sql . " ( NationalId like :q";        
 //             $sql = $sql . " OR  GivenName like :q";        
@@ -87,22 +87,22 @@ class DBContext
 
     function getHelpRequest($Email)
     {
-        $prep = $this->pdo->prepare('SELECT * FROM helplist where Email=' . $Email . ' and Active=1');
-        $prep->setFetchMode(PDO::FETCH_CLASS, 'HelpRequest');
-        $prep->execute(['Email' => $Email]);
-        // $query = 'SELECT * FROM helplist WHERE Email=' . $Email . ' AND Active=1';
-        // return $this->pdo->exec($query);
-        return $prep->fetch();
+        // $prep = $this->pdo->prepare('SELECT * FROM helplist where Email="' . $Email . '" and Active=1');
+        // $prep->setFetchMode(PDO::FETCH_CLASS, 'HelpRequest');
+        // $prep->execute(['Email' => $Email]);
+        $query = 'SELECT * FROM helplist WHERE Email="' . $Email . '" AND Active=1';
+        return $this->pdo->query($query)->fetchAll(PDO::FETCH_CLASS, 'HelpRequest');
+        // return $prep->fetch();
     }
     //     function getCustomerByNames($GivenName,$Surname){
-//         $prep = $this->pdo->prepare('SELECT * FROM Customer where GivenName=:givenname and Surname=:surname');
-//         $prep->setFetchMode(PDO::FETCH_CLASS,'Customer');
-//         $prep->execute(['givenname'=> $GivenName, 'surname' => $Surname]); 
-//         return  $prep->fetch();
-//     }
+    //         $prep = $this->pdo->prepare('SELECT * FROM Customer where GivenName=:givenname and Surname=:surname');
+    //         $prep->setFetchMode(PDO::FETCH_CLASS,'Customer');
+    //         $prep->execute(['givenname'=> $GivenName, 'surname' => $Surname]); 
+    //         return  $prep->fetch();
+    //     }
 
     //     function getOfficeByName($title) {
-//         $prep = $this->pdo->prepare('SELECT * FROM Office where name=:title');
+    //         $prep = $this->pdo->prepare('SELECT * FROM Office where name=:title');
 //         $prep->setFetchMode(PDO::FETCH_CLASS,'Office');
 //         $prep->execute(['title'=> $title]); 
 //         return  $prep->fetch();
@@ -110,12 +110,43 @@ class DBContext
 
 
     //     function getOffice($id) {
-//         $prep = $this->pdo->prepare('SELECT * FROM Office where id=:id');
+    //         $prep = $this->pdo->prepare('SELECT * FROM Office where id=:id');
 //         $prep->setFetchMode(PDO::FETCH_CLASS,'Office');
 //         $prep->execute(['id'=> $id]); 
 //         return  $prep->fetch();
 //     }
+    function seedIfNotSeeded()
+    {
+        static $seeded = false;
+        if ($seeded)
+            return;
+        $this->createIfNotExisting("Kriss Trädkoja", "kriss@kriss.se", "Teams", "Öronfluss");
+        $this->createIfNotExisting("Pellan G-unit", "pellan@pellan.se", "Rum2", "Valideringsbekymmer");
+        $this->createIfNotExisting("Johan-Toan", "johan@johan.se", "Acapulco", "Dålig stämning");
 
+        $seeded = true;
+    }
+
+    function getExistingRequests($Email): int
+    {
+        // $prep = $this->pdo->prepare('SELECT * FROM helplist where StudentName=":StudentName"');
+        // $prep->setFetchMode(PDO::FETCH_CLASS, 'HelpRequest');
+        // $prep->execute(['StudentName' => $StudentName]);
+        // return $prep->fetch();
+        $query = 'SELECT * FROM helplist WHERE Email="' . $Email . '"';
+        return $this->pdo->query($query)->rowCount();
+    }
+
+    function createIfNotExisting($StudentName, $Email, $Location, $Question)
+    {
+        $existing = $this->getExistingRequests($Email);
+        if ($existing > 0) {
+            return;
+        }
+        ;
+        return $this->addHelpRequest($StudentName, $Email, $Location, $Question, 1);
+
+    }
     function addHelpRequest($StudentName, $Email, $Location, $Question, $Active)
     {
         $prep = $this->pdo->prepare('INSERT INTO helplist (StudentName, Email, Location, Question, Active) VALUES(:StudentName,:Email, :Location, :Question, :Active )');
@@ -138,15 +169,15 @@ class DBContext
 
 
     //     function addCustomer($givenname, $surname,$Streetaddress, $City, $Zipcode, $Country, $CountryCode, $Birthday, $NationalId, $TelephoneCountryCode, $Telephone, $EmailAddress, $OfficeId){
-//         $prep = $this->pdo->prepare("INSERT INTO Customer
-//                         (GivenName, Surname, Streetaddress, City, Zipcode, Country, CountryCode, Birthday, NationalId, TelephoneCountryCode, Telephone, EmailAddress, OfficeId)
-//                     VALUES(:GivenName, :Surname, :Streetaddress, :City, :Zipcode, :Country, :CountryCode, :Birthday, :NationalId, :TelephoneCountryCode, :Telephone, :EmailAddress, :OfficeId);
-//         ");
-//         $prep->execute(["GivenName"=>$givenname,"Surname"=>$surname,"Streetaddress"=>$Streetaddress,"City"=>$City,
-//             "Zipcode"=>$Zipcode,"Country"=>$Country,
-//             "CountryCode"=>$CountryCode,"Birthday"=>$Birthday,"NationalId"=>$NationalId,"TelephoneCountryCode"=>$TelephoneCountryCode,
-//             "Telephone"=>$Telephone,"EmailAddress"=>$EmailAddress,"OfficeId"=>$OfficeId]);
-//         return $this->pdo->lastInsertId();
+    //         $prep = $this->pdo->prepare("INSERT INTO Customer
+    //                         (GivenName, Surname, Streetaddress, City, Zipcode, Country, CountryCode, Birthday, NationalId, TelephoneCountryCode, Telephone, EmailAddress, OfficeId)
+    //                     VALUES(:GivenName, :Surname, :Streetaddress, :City, :Zipcode, :Country, :CountryCode, :Birthday, :NationalId, :TelephoneCountryCode, :Telephone, :EmailAddress, :OfficeId);
+    //         ");
+    //         $prep->execute(["GivenName"=>$givenname,"Surname"=>$surname,"Streetaddress"=>$Streetaddress,"City"=>$City,
+    //             "Zipcode"=>$Zipcode,"Country"=>$Country,
+    //             "CountryCode"=>$CountryCode,"Birthday"=>$Birthday,"NationalId"=>$NationalId,"TelephoneCountryCode"=>$TelephoneCountryCode,
+    //             "Telephone"=>$Telephone,"EmailAddress"=>$EmailAddress,"OfficeId"=>$OfficeId]);
+    //         return $this->pdo->lastInsertId();
 
     //     }
 
@@ -170,20 +201,20 @@ class DBContext
 
 
         //         $sql  ="CREATE TABLE IF NOT EXISTS `Customer` (
-//             `Id` int NOT NULL AUTO_INCREMENT,
-//             `GivenName` varchar(50) NOT NULL,
-//             `Surname` varchar(50) NOT NULL,
-//             `Streetaddress` varchar(50) NOT NULL,
-//             `City` varchar(50) NOT NULL,
-//             `Zipcode` varchar(10) NOT NULL,
-//             `Country` varchar(30) NOT NULL,
-//             `CountryCode` varchar(2) NOT NULL,
-//             `Birthday` datetime NOT NULL,
-//             `NationalId` varchar(20) NOT NULL,
-//             `TelephoneCountryCode` int NOT NULL,
-//             `Telephone` varchar(20) NOT NULL,
-//             `EmailAddress` varchar(50) NOT NULL,
-//             `OfficeId` INT NOT NULL,
+        //             `Id` int NOT NULL AUTO_INCREMENT,
+        //             `GivenName` varchar(50) NOT NULL,
+        //             `Surname` varchar(50) NOT NULL,
+        //             `Streetaddress` varchar(50) NOT NULL,
+        //             `City` varchar(50) NOT NULL,
+        //             `Zipcode` varchar(10) NOT NULL,
+        //             `Country` varchar(30) NOT NULL,
+        //             `CountryCode` varchar(2) NOT NULL,
+        //             `Birthday` datetime NOT NULL,
+        //             `NationalId` varchar(20) NOT NULL,
+        //             `TelephoneCountryCode` int NOT NULL,
+        //             `Telephone` varchar(20) NOT NULL,
+        //             `EmailAddress` varchar(50) NOT NULL,
+        //             `OfficeId` INT NOT NULL,
 //             PRIMARY KEY (`Id`),
 //             FOREIGN KEY (`OfficeId`)
 //                 REFERENCES Office(id)

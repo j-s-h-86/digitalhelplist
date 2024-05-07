@@ -23,6 +23,7 @@ layout_header("MI:s digitala hjälplista");
     }
 </script>
 
+
 <body>
 
 
@@ -32,8 +33,34 @@ layout_header("MI:s digitala hjälplista");
     ?>
     <!------------------main-------------->
     <main>
-        <p>Din förfrågan är skickad du har plats ... i kön.</p>
+        <?php foreach ($getHelp as $helpRequest) { ?>
+            <br>
+            <li value><?php echo $helpRequest->StudentName ?>
+            </li>
+            <li><?php echo $helpRequest->Email ?>
+            </li>
+            <li><?php echo $helpRequest->Location ?>
+            </li>
+            <li><?php echo $helpRequest->Question ?>
+            </li>
+            <li><?php echo $helpRequest->Active ?>
+            </li>
+            <li><?php echo $helpRequest->Id ?>
+            </li>
 
+            <?php
+
+            if ($helpRequest->Active) {
+                ?>
+
+                <button id="updateRequest" type="submit"
+                    onclick="javascript:updateHelpRequest(<?php echo $helpRequest->Id ?>)">Lämna kön</button>
+                <?php
+            } ?>
+            <?php
+        }
+        ?>
+        </ul>
     </main>
 
 </body>

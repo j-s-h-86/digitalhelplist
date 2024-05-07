@@ -38,6 +38,11 @@ $router->addRoute('/updateHelpRequest', function () {
 $router->addRoute('/sentrequest', function () {
     require __DIR__ . '/Pages/sentrequest.php';
 });
+
+$router->addRoute('/studentrequest', function () {
+    require __DIR__ . '/Pages/studentrequest.php';
+});
+
 $router->addRoute('/courses', function () {
     require __DIR__ . '/Pages/courses.php';
 });

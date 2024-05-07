@@ -104,8 +104,18 @@ class UserDatabase
       $this->auth->admin()->addRoleForUserById($userId, UserRoles::TEACHER);
     }
 
-    if ($this->pdo->query("select * from users where email='oliver@systementor.se'")->rowCount() == 0) {
-      $userId = $this->auth->admin()->createUser("oliver@systementor.se", "Hejsan123#", "oliver@systementor.se");
+    if ($this->pdo->query("select * from users where email='pellan@pellan.se'")->rowCount() == 0) {
+      $userId = $this->auth->admin()->createUser("pellan@pellan.se", "Hejsan123#", "pellan@pellan.se");
+      $this->auth->admin()->addRoleForUserById($userId, UserRoles::STUDENT);
+    }
+
+    if ($this->pdo->query("select * from users where email='johan@johan.se'")->rowCount() == 0) {
+      $userId = $this->auth->admin()->createUser("johan@johan.se", "Hejsan123#", "johan@johan.se");
+      $this->auth->admin()->addRoleForUserById($userId, UserRoles::STUDENT);
+    }
+
+    if ($this->pdo->query("select * from users where email='kriss@kriss.se'")->rowCount() == 0) {
+      $userId = $this->auth->admin()->createUser("kriss@kriss.se", "Hejsan123#", "kriss@kriss.se");
       $this->auth->admin()->addRoleForUserById($userId, UserRoles::STUDENT);
     }
 
