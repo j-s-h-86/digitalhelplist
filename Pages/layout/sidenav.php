@@ -13,7 +13,7 @@ function layout_sidenav($dbContext)
                         <img src="/images/blank-profile-picture.png" alt="Not logged in">
                     </div>
                     <div class="user-info">
-                        <h2>Account</h2>
+                        <h2>Välkommen</h2>
                         <?php
                         if (!$dbContext->getUsersDatabase()->getAuth()->isLoggedIn()) {
                             ?>

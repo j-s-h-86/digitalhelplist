@@ -46,7 +46,7 @@ $dbContext = new DBContext();
 
 
 
-layout_header("MI Handledningsapp")
+layout_header("MI:s digitala hjälplista")
     ?>
 
 

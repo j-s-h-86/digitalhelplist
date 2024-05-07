@@ -13,7 +13,7 @@ $dbContext = new DBContext();
 
 
 
-layout_header("MI:s Handlednings-app");
+layout_header("MI:s digitala hjälplista");
 ?>
 
 

@@ -14,8 +14,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
 
 ?>
 <?php
-layout_header("Helplist")
-    ?>
+layout_header("MI:s digitala hjälplista");
+?>
 <script>
     async function updateHelpRequest(id) {
         const updateHelpRequest = await (await fetch(`/updateHelpRequest?id=${id}`))

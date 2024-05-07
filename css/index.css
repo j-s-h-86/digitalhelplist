@@ -1,0 +1,7 @@
+.heroimage {
+    width: 100%;
+    height: 100vh;
+    background: url("../images/mi.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
