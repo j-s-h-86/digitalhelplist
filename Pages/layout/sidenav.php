@@ -1,6 +1,7 @@
 <?php
 require_once ('Functions/SideNavStudent.php');
 require_once ('Functions/SideNavTeacher.php');
+require_once ('Functions/SideNavAdmin.php');
 function layout_sidenav($dbContext)
 {
     ?>
@@ -51,6 +52,8 @@ function layout_sidenav($dbContext)
                 <?php sideNavTeacher($dbContext); ?>
 
                 <?php sideNavStudent($dbContext); ?>
+
+                <?php sideNavAdmin($dbContext) ?>
 
                 <li class="line-split"></li>
                 <li>

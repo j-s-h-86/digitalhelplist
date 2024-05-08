@@ -58,6 +58,9 @@ $router->addRoute('/users/login', function () {
 $router->addRoute('/users/logout', function () {
     require (__DIR__ . '/Pages/users/logout.php');
 });
+$router->addRoute('/users/register', function () {
+    require (__DIR__ . '/Pages/users/register.php');
+});
 
 $router->dispatch();
 ?>

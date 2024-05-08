@@ -1050,3 +1050,6 @@ textarea,select,input[type=text],input[type=date],input[type=number],input[type=
     background-repeat: no-repeat;
     background-size: contain;
 }
+.login-link__container{
+    margin-top: 10px;
+}
