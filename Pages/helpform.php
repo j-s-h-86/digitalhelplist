@@ -66,6 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 <html>
+<?php layout_header("MI:s digitala hjälplista") ?>
 
 <body>
     <?php
@@ -84,5 +85,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ?>
     </main>
 </body>
+<?php layout_footer() ?>
 
 </html>
