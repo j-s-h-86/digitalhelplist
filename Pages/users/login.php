@@ -29,7 +29,7 @@ layout_header("Logga in");
 ?>
 
 <body>
-    <?php echo $dbContext->getUsersDatabase()->getAuth()->isLoggedIn(); ?>
+    <?php $dbContext->getUsersDatabase()->getAuth()->isLoggedIn(); ?>
     <main>
         <div class="top-header">
             <div class="logo">
@@ -73,9 +73,10 @@ layout_header("Logga in");
                                             <th><label for="name">Password</label></th>
                                             <td>
                                                 <input class="form-control" type="password" name="password">
-
+                                                <a href="/users/forgotpassword">Glömt lösenord?</a>
                                             </td>
                                         </tr>
+
 
 
                                         <tr>

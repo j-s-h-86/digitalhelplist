@@ -62,5 +62,17 @@ $router->addRoute('/users/register', function () {
     require (__DIR__ . '/Pages/users/register.php');
 });
 
+$router->addRoute('/users/forgotpassword', function () {
+    require (__DIR__ . '/Pages/users/forgotpassword.php');
+});
+
+$router->addRoute('/resetpassword', function () {
+    require (__DIR__ . '/Pages/resetpassword.php');
+});
+
+$router->addRoute('/passwordreset', function () {
+    require (__DIR__ . '/Pages/processresetpassword.php');
+});
+
 $router->dispatch();
 ?>
