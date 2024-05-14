@@ -71,7 +71,7 @@ layout_sidenav($dbContext);
                 ?>
 
                 <div class="register-header__container">
-                    <h2>Ny kund <?php echo $message; ?></h2>
+                    <h2>Ny användare <?php echo $message; ?></h2>
                 </div>
                 <form method="POST" class="register-form">
                     <input class="input-register__username" type="text" name="username" value="<?php echo $username ?>"
