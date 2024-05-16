@@ -1,6 +1,8 @@
 <?php
 require_once ('Models/UserDatabase.php');
 require_once ('Models/HelpRequest.php');
+require_once ('Models/Students.php');
+require_once ('Models/Teachers.php');
 
 
 
@@ -28,19 +30,28 @@ class DBContext
         $this->usersDatabase->setupUsers();
         $this->usersDatabase->seedUsers();
         $this->initIfNotInitialized();
-        $courseNames = ["Frontend", "Backend"];
-        $this->addCourses($courseNames);
         $this->seedIfNotSeeded();
     }
-    function addCourses($courseNames)
+    function addCourses($courseName)
     {
         $prep = $this->pdo->prepare('INSERT INTO courses (CourseName) VALUES(:CourseName)');
-        foreach ($courseNames as $courseName) {
-            $prep->execute(["CourseName" => $courseName]);
-        }
+        $prep->execute(["CourseName" => $courseName]);
+
+        return $this->pdo->lastInsertId();
+    }
+    function addStudent($StudentName, $Email, $CourseID)
+    {
+        $prep = $this->pdo->prepare('INSERT INTO students (Studentname, Email, CourseID) VALUES(:Studentname,:Email, :CourseID)');
+        $prep->execute(["Studentname" => $StudentName, "Email" => $Email, "CourseID" => $CourseID]);
         return $this->pdo->lastInsertId();
     }
 
+    function addTeacher($name, $Email, $CourseID)
+    {
+        $prep = $this->pdo->prepare('INSERT INTO teachers (name, Email, CourseID) VALUES(:name,:Email, :CourseID)');
+        $prep->execute(["name" => $name, "Email" => $Email, "CourseID" => $CourseID]);
+        return $this->pdo->lastInsertId();
+    }
     function getAllHelpRequest()
     {
 
@@ -201,6 +212,8 @@ class DBContext
             )";
 
         $this->pdo->exec($sql);
+        $this->addCourses("Frontend");
+        $this->addCourses("Backend");
 
         $sql = "CREATE TABLE IF NOT EXISTS `students` (
                 `Id`INT AUTO_INCREMENT NOT NULL,
@@ -212,16 +225,22 @@ class DBContext
             )";
 
         $this->pdo->exec($sql);
+        $this->addStudent("Kriss Stockhaus", "kriss@kriss.se", 1);
+        $this->addStudent("Pellan G", "pellan@pellan.se", 2);
+        $this->addStudent("Johan H", "johan@johan.se", 2);
 
         $sql = "CREATE TABLE IF NOT EXISTS `teachers` (
             `Id`INT AUTO_INCREMENT NOT NULL,
             `Name` varchar(200) NOT NULL,
+            `Email` varchar(200) NOT NULL,
             `CourseID`INT NOT NULL,
             PRIMARY KEY (`Id`),
             FOREIGN KEY (CourseID) REFERENCES courses(Id)
             ) ";
 
         $this->pdo->exec($sql);
+        $this->addTeacher("Sebastian Tegel", "sebbe@tegel_rules.se", 1);
+        $this->addTeacher("Stefan Holmberg", "stefan.holmberg@systementor.se", 2);
 
         $sql = "CREATE TABLE IF NOT EXISTS `helplist` (
             `Id` INT AUTO_INCREMENT NOT NULL,
@@ -236,12 +255,6 @@ class DBContext
             ) ";
 
         $this->pdo->exec($sql);
-
-
-        //         $this->usersDatabase->setupUsers();
-//         $this->usersDatabase->seedUsers();
-
-        //         $initialized = true;
     }
 
 
