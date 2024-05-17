@@ -10,17 +10,24 @@ require_once ("Pages/layout/footer.php");
 $dbContext = new DbContext();
 $message = "";
 $username = "";
+$name = "";
 $registeredOk = false;
 $passwordAgain = "";
 $error = false;
 $password = "";
 $userId = "";
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $name = $_POST['studentname'];
     $passwordAgain = $_POST['passwordAgain'];
     $username = $_POST['username'];
+    $Email = $username;
     $password = $_POST['password'];
+    $CourseID = $_POST['Course'];
     if ($password === $passwordAgain) {
         $userId = $dbContext->getUsersDatabase()->getAuth()->register($username, $password, $username);
+        $dbContext->addStudent($name, $Email, $CourseID, $userId);
+        $dbContext->addTeacher($name, $Email, $CourseID, $userId);
         $registeredOk = true;
     } else {
         $error = true;
@@ -49,9 +56,23 @@ layout_sidenav($dbContext);
                             break;
                         case 'Teacher':
                             $dbContext->getUsersDatabase()->getAuth()->admin()->addRoleForUserById($userId, UserRoles::TEACHER);
+
                             break;
                         case 'Admin':
                             $dbContext->getUsersDatabase()->getAuth()->admin()->addRoleForUserById($userId, UserRoles::ADMINISTRATOR);
+                            break;
+                    }
+                }
+                ?>
+                <?php
+                if (isset($_POST['Course'])) {
+                    $Courses = $_POST['Course'];
+                    switch ($Courses) {
+                        case 'Frontend':
+                            $CourseID = 1;
+                            break;
+                        case 'Backend':
+                            $CourseID = 2;
                             break;
                     }
                 }
@@ -74,6 +95,8 @@ layout_sidenav($dbContext);
                     <h2>Ny användare <?php echo $message; ?></h2>
                 </div>
                 <form method="POST" class="register-form">
+                    <input class="input-register__studentname" type="text" name="studentname" value="<?php echo $name ?>"
+                        placeholder="Namn">
                     <input class="input-register__username" type="text" name="username" value="<?php echo $username ?>"
                         placeholder="Användarnamn">
 
@@ -89,6 +112,12 @@ layout_sidenav($dbContext);
                             Lärare</option>
                         <option value="Admin">
                             Admin</option>
+                    </select>
+                    <select name="Course" id="Course">
+                        <option name=1 value=1>
+                            Frontend</option>
+                        <option name=2 value=2>
+                            Backend</option>
                     </select>
 
                     <div class="login-link__container">
