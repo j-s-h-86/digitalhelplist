@@ -1,16 +1,11 @@
 <?php
 require ('Models/Database.php');
 require_once ('Models/HelpRequest.php');
+require_once ('Models/Teachers.php');
 require_once ('layout/header.php');
 require_once ('layout/sidenav.php');
 
-
-
 $dbContext = new dbContext();
-
-if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $Id = $_GET['id'] ?? "";
-}
 
 ?>
 <?php
@@ -29,44 +24,55 @@ layout_header("MI:s digitala hjälplista");
     <?php
     layout_sidenav($dbContext);
     ?>
-    <main>
-        <ul>
+    <main class="helplist-main">
+        <?php $UserId = $dbContext->getUsersDatabase()->getAuth()->getUserId();
 
-            <?php foreach ($dbContext->getAllHelpRequest() as $helpRequest) { ?>
-                <br>
+        $teacher = $dbContext->getTeacherById($UserId) ?>
 
-                <li value><?php echo $helpRequest->StudentName ?>
-                </li>
-                <!-- <li><?php echo $dbContext->getCourseByName($Id) ?>
-                </li> -->
-                <li><?php echo $helpRequest->Email ?>
-                </li>
-                <li><?php echo $helpRequest->Location ?>
-                </li>
-                <li><?php echo $helpRequest->Question ?>
-                </li>
-                <li><?php echo $helpRequest->Active ?>
-                </li>
-                <li><?php echo $helpRequest->Id ?>
-                </li>
+        <?php
 
-                <?php
+        foreach ($dbContext->getAllHelpRequest() as $helpRequest) {
+            $course = $dbContext->getCourseById($helpRequest->CourseID);
+            if ($teacher->CourseID === $course->Id) {
 
-                if ($helpRequest->Active) {
-                    ?>
-
-                    <button id="updateRequest" type="submit"
-                        onclick="javascript:updateHelpRequest(<?php echo $helpRequest->Id ?>)">Help</button>
-                    <?php
-                } else {
-                    ?>
-                    <button disabled>Done</button>
-                    <?php
-                }
                 ?>
+                <div class="helplist">
+                    <p>Namn</p>
+                    <li value><?php echo $helpRequest->StudentName ?>
+                    </li>
+                    <li>
+                    </li>
+                    <p>Mail</p>
+                    <li><?php echo $helpRequest->Email ?>
+                    </li>
+                    <p>Kurs</p>
+                    <li><?php echo $course->CourseName ?>
+                    </li>
+                    <p>Plats</p>
+                    <li><?php echo $helpRequest->Location ?>
+                    </li>
+                    <p>Fråga</p>
+                    <li><?php echo $helpRequest->Question ?>
+                    </li>
+
+                    <?php
+
+                    if ($helpRequest->Active) {
+                        ?>
+
+                        <button id="updateRequest" type="submit"
+                            onclick="javascript:updateHelpRequest(<?php echo $helpRequest->Id ?>)">Help</button>
+                        <?php
+                    } else {
+                        ?>
+                        <button disabled>Done</button>
+                        <?php
+                    }
+                    ?>
+                </div>
                 <?php
             }
-            ?>
-        </ul>
+        }
+        ?>
     </main>
 </body>

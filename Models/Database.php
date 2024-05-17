@@ -47,6 +47,13 @@ class DBContext
         $prep->execute(['CourseName' => $courseName]);
         return $prep->fetch();
     }
+    function getCourseById($Id)
+    {
+        $prep = $this->pdo->prepare('SELECT * FROM courses where Id=:Id');
+        $prep->setFetchMode(PDO::FETCH_CLASS, 'Courses');
+        $prep->execute(['Id' => $Id]);
+        return $prep->fetch();
+    }
 
     function addStudent($StudentName, $Email, $CourseID, $UserID)
     {
@@ -77,7 +84,13 @@ class DBContext
         $prep->execute(['name' => $name]);
         return $prep->fetch();
     }
-
+    function getTeacherById($UserId)
+    {
+        $prep = $this->pdo->prepare('SELECT * FROM teachers where UserID=:UserID');
+        $prep->setFetchMode(PDO::FETCH_CLASS, 'Teachers');
+        $prep->execute(['UserID' => $UserId]);
+        return $prep->fetch();
+    }
     function getAllHelpRequest()
     {
         return $this->pdo->query('SELECT * FROM helplist ORDER BY Id')->fetchAll(PDO::FETCH_CLASS, 'HelpRequest');

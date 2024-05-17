@@ -32,35 +32,36 @@ layout_header("MI:s digitala hjälplista");
     layout_sidenav($dbContext);
     ?>
     <!------------------main-------------->
-    <main>
+    <main class="studentreaguest-main">
+
         <?php foreach ($getHelp as $helpRequest) { ?>
-            <br>
-            <li value><?php echo $helpRequest->StudentName ?>
-            </li>
-            <li><?php echo $helpRequest->Email ?>
-            </li>
-            <li><?php echo $helpRequest->Location ?>
-            </li>
-            <li><?php echo $helpRequest->Question ?>
-            </li>
-            <li><?php echo $helpRequest->Active ?>
-            </li>
-            <li><?php echo $helpRequest->Id ?>
-            </li>
-
-            <?php
-
-            if ($helpRequest->Active) {
-                ?>
-
-                <button id="updateRequest" type="submit"
-                    onclick="javascript:updateHelpRequest(<?php echo $helpRequest->Id ?>)">Lämna kön</button>
+            <div class="studentrequest">
+                <p> Namn</p>
+                <li value><?php echo $helpRequest->StudentName ?>
+                </li>
+                <p> Mail </p>
+                <li><?php echo $helpRequest->Email ?>
+                </li>
+                <p>Plats</p>
+                <li><?php echo $helpRequest->Location ?>
+                </li>
+                <p>Fråga</p>
+                <li><?php echo $helpRequest->Question ?>
+                </li>
                 <?php
-            } ?>
+
+                if ($helpRequest->Active) {
+                    ?>
+
+                    <button id="updateRequest" type="submit"
+                        onclick="javascript:updateHelpRequest(<?php echo $helpRequest->Id ?>)">Lämna kön</button>
+                    <?php
+                } ?>
+            </div>
             <?php
         }
         ?>
-        </ul>
+
     </main>
 
 </body>

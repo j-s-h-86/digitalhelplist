@@ -37,6 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $HelpRequest->CourseID,
             $HelpRequest->Question,
             $HelpRequest->Active,
+            $HelpRequest->CourseID,
         );
         header("Location: /sentrequest");
         exit;

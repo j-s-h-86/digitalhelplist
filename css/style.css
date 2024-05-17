@@ -1053,3 +1053,21 @@ textarea,select,input[type=text],input[type=date],input[type=number],input[type=
 .login-link__container{
     margin-top: 10px;
 }
+.studentreaguest-main,.helplist-main{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 20px;
+}
+.studentrequest,.helplist{
+    width:30%;
+    border: 1px solid black;
+    padding:10px;
+
+}
+.studentrequest li,.helplist li{
+list-style: none;
+}
+.studentrequest p,.helplist p {
+    font-weight: bold;
+    }
