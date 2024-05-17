@@ -6,7 +6,7 @@ class HelpRequest
     public $StudentName;
     public $Email;
     public $Location;
-    public $Course;
+    public $CourseID;
     public $Question;
     public $Active;
 

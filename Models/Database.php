@@ -3,13 +3,12 @@ require_once ('Models/UserDatabase.php');
 require_once ('Models/HelpRequest.php');
 require_once ('Models/Students.php');
 require_once ('Models/Teachers.php');
+require_once ('Models/Courses.php');
 
 
 
 class DBContext
 {
-
-
     private $pdo;
     private $usersDatabase;
 
@@ -32,6 +31,7 @@ class DBContext
         $this->initIfNotInitialized();
         $this->seedIfNotSeeded();
     }
+
     function addCourses($courseName)
     {
         $prep = $this->pdo->prepare('INSERT INTO courses (CourseName) VALUES(:CourseName)');
@@ -39,11 +39,28 @@ class DBContext
 
         return $this->pdo->lastInsertId();
     }
+
+    function getCourseByName($courseName)
+    {
+        $prep = $this->pdo->prepare('SELECT * FROM courses where CourseName=:CourseName');
+        $prep->setFetchMode(PDO::FETCH_CLASS, 'Courses');
+        $prep->execute(['CourseName' => $courseName]);
+        return $prep->fetch();
+    }
+
     function addStudent($StudentName, $Email, $CourseID)
     {
         $prep = $this->pdo->prepare('INSERT INTO students (Studentname, Email, CourseID) VALUES(:Studentname,:Email, :CourseID)');
         $prep->execute(["Studentname" => $StudentName, "Email" => $Email, "CourseID" => $CourseID]);
         return $this->pdo->lastInsertId();
+    }
+
+    function getStudentByName($StudentName)
+    {
+        $prep = $this->pdo->prepare('SELECT * FROM students where Studentname=:Studentname');
+        $prep->setFetchMode(PDO::FETCH_CLASS, 'Students');
+        $prep->execute(['Studentname' => $StudentName]);
+        return $prep->fetch();
     }
 
     function addTeacher($name, $Email, $CourseID)
@@ -52,87 +69,26 @@ class DBContext
         $prep->execute(["name" => $name, "Email" => $Email, "CourseID" => $CourseID]);
         return $this->pdo->lastInsertId();
     }
-    function getAllHelpRequest()
+
+    function getTeacherByName($name)
     {
-
-        return $this->pdo->query('SELECT * FROM helplist ORDER BY Id')->fetchAll(PDO::FETCH_CLASS, 'HelpRequest');
-
+        $prep = $this->pdo->prepare('SELECT * FROM teachers where name=:name');
+        $prep->setFetchMode(PDO::FETCH_CLASS, 'Teachers');
+        $prep->execute(['name' => $name]);
+        return $prep->fetch();
     }
 
-    //     function searchCustomers($sortCol, $sortOrder, $q,$categoryId){
-    //         if($sortCol == null){
-    //             $sortCol = "Id";
-    //         }
-    //         if($sortOrder == null){
-    //             $sortOrder = "asc";
-    //         }
-    //         $sql = "SELECT * FROM Customer ";
-    //         $paramsArray = [];
-    //         $addedWhere = false;
-    //         if($q != null && strlen($q) > 0){  // Omman angett ett q - WHERE   tef
-//                 // select * from product where title like '%tef%' // Stefan  tefan atef
-//             if(!$addedWhere){
-//                 $sql = $sql . " WHERE ";            
-//                 $addedWhere = true;
-//             }else{
-    //                 $sql = $sql . " AND ";    
-//             }
-//             $sql = $sql . " ( NationalId like :q";        
-//             $sql = $sql . " OR  GivenName like :q";        
-//             $sql = $sql . " OR  Surname like :q";        
-//             $sql = $sql . " OR  City like :q )";        
-//             $paramsArray["q"] = '%' . $q . '%';                
-//         }
-//         if($categoryId != null && strlen($categoryId) > 0){
-//             if(!$addedWhere){
-//                 $sql = $sql . " WHERE ";            
-//                 $addedWhere = true;
-//             }else{
-//                 $sql = $sql . " AND ";    
-//             }
-
-    //             $sql = $sql . " ( OfficeId = :categoryId )";        
-//             $paramsArray["categoryId"] = $categoryId;                
-//         }
-
-
-    //         $sql .= " ORDER BY $sortCol $sortOrder ";    
-
-    //         $prep = $this->pdo->prepare($sql);
-//         $prep->setFetchMode(PDO::FETCH_CLASS,'Customer');
-//         $prep->execute($paramsArray);
-
-
-    //         return $prep->fetchAll();        
-//     }
+    function getAllHelpRequest()
+    {
+        return $this->pdo->query('SELECT * FROM helplist ORDER BY Id')->fetchAll(PDO::FETCH_CLASS, 'HelpRequest');
+    }
 
     function getHelpRequest($Email)
     {
         $query = 'SELECT * FROM helplist WHERE Email="' . $Email . '" AND Active=1';
         return $this->pdo->query($query)->fetchAll(PDO::FETCH_CLASS, 'HelpRequest');
-        // return $prep->fetch();
     }
-    //     function getCustomerByNames($GivenName,$Surname){
-    //         $prep = $this->pdo->prepare('SELECT * FROM Customer where GivenName=:givenname and Surname=:surname');
-    //         $prep->setFetchMode(PDO::FETCH_CLASS,'Customer');
-    //         $prep->execute(['givenname'=> $GivenName, 'surname' => $Surname]); 
-    //         return  $prep->fetch();
-    //     }
 
-    //     function getOfficeByName($title) {
-    //         $prep = $this->pdo->prepare('SELECT * FROM Office where name=:title');
-//         $prep->setFetchMode(PDO::FETCH_CLASS,'Office');
-//         $prep->execute(['title'=> $title]); 
-//         return  $prep->fetch();
-//     }
-
-
-    //     function getOffice($id) {
-    //         $prep = $this->pdo->prepare('SELECT * FROM Office where id=:id');
-//         $prep->setFetchMode(PDO::FETCH_CLASS,'Office');
-//         $prep->execute(['id'=> $id]); 
-//         return  $prep->fetch();
-//     }
     function seedIfNotSeeded()
     {
         static $seeded = false;
@@ -151,23 +107,23 @@ class DBContext
         return $this->pdo->query($query)->rowCount();
     }
 
-    function createIfNotExisting($StudentName, $Email, $Location, $Course, $Question)
+    function createIfNotExisting($StudentName, $Email, $Location, $CourseID, $Question)
     {
         $existing = $this->getExistingRequests($Email);
         if ($existing > 0) {
             return;
         }
         ;
-        return $this->addHelpRequest($StudentName, $Email, $Location, $Course, $Question, 1);
+        return $this->addHelpRequest($StudentName, $Email, $Location, $CourseID, $Question, 1);
 
     }
 
 
-    function addHelpRequest($StudentName, $Email, $Location, $Course, $Question, $Active)
+    function addHelpRequest($StudentName, $Email, $Location, $CourseID, $Question, $Active)
     {
         $prep = $this->pdo->prepare('INSERT INTO helplist (StudentName, Email, Location, CourseID, Question, Active) 
         VALUES(:StudentName, :Email, :Location, :CourseID, :Question, :Active )');
-        $prep->execute(["StudentName" => $StudentName, "Email" => $Email, "Location" => $Location, "CourseID" => $Course, "Question" => $Question, "Active" => $Active]);
+        $prep->execute(["StudentName" => $StudentName, "Email" => $Email, "Location" => $Location, "CourseID" => $CourseID, "Question" => $Question, "Active" => $Active]);
         return $this->pdo->lastInsertId();
     }
 
@@ -177,26 +133,7 @@ class DBContext
         $prep = $this->pdo->prepare("UPDATE helplist SET `Active` = 0 WHERE Id=:Id");
         $prep->execute(["Id" => $Id]);
         return "Updaterad";
-
-
-
     }
-
-
-
-
-    //     function addCustomer($givenname, $surname,$Streetaddress, $City, $Zipcode, $Country, $CountryCode, $Birthday, $NationalId, $TelephoneCountryCode, $Telephone, $EmailAddress, $OfficeId){
-    //         $prep = $this->pdo->prepare("INSERT INTO Customer
-    //                         (GivenName, Surname, Streetaddress, City, Zipcode, Country, CountryCode, Birthday, NationalId, TelephoneCountryCode, Telephone, EmailAddress, OfficeId)
-    //                     VALUES(:GivenName, :Surname, :Streetaddress, :City, :Zipcode, :Country, :CountryCode, :Birthday, :NationalId, :TelephoneCountryCode, :Telephone, :EmailAddress, :OfficeId);
-    //         ");
-    //         $prep->execute(["GivenName"=>$givenname,"Surname"=>$surname,"Streetaddress"=>$Streetaddress,"City"=>$City,
-    //             "Zipcode"=>$Zipcode,"Country"=>$Country,
-    //             "CountryCode"=>$CountryCode,"Birthday"=>$Birthday,"NationalId"=>$NationalId,"TelephoneCountryCode"=>$TelephoneCountryCode,
-    //             "Telephone"=>$Telephone,"EmailAddress"=>$EmailAddress,"OfficeId"=>$OfficeId]);
-    //         return $this->pdo->lastInsertId();
-
-    //     }
 
     function initIfNotInitialized()
     {
@@ -212,8 +149,12 @@ class DBContext
             )";
 
         $this->pdo->exec($sql);
-        $this->addCourses("Frontend");
-        $this->addCourses("Backend");
+        if (!$this->getCourseByName("Frontend")) {
+            $this->addCourses("Frontend");
+        }
+        if (!$this->getCourseByName("Backend")) {
+            $this->addCourses("Backend");
+        }
 
         $sql = "CREATE TABLE IF NOT EXISTS `students` (
                 `Id`INT AUTO_INCREMENT NOT NULL,
@@ -225,9 +166,15 @@ class DBContext
             )";
 
         $this->pdo->exec($sql);
-        $this->addStudent("Kriss Stockhaus", "kriss@kriss.se", 1);
-        $this->addStudent("Pellan G", "pellan@pellan.se", 2);
-        $this->addStudent("Johan H", "johan@johan.se", 2);
+        if (!$this->getStudentByName("Kriss Stockhaus")) {
+            $this->addStudent("Kriss Stockhaus", "kriss@kriss.se", 1);
+        }
+        if (!$this->getStudentByName("Pellan G")) {
+            $this->addStudent("Pellan G", "pellan@pellan.se", 2);
+        }
+        if (!$this->getStudentByName("Johan H")) {
+            $this->addStudent("Johan H", "johan@johan.se", 2);
+        }
 
         $sql = "CREATE TABLE IF NOT EXISTS `teachers` (
             `Id`INT AUTO_INCREMENT NOT NULL,
@@ -239,8 +186,12 @@ class DBContext
             ) ";
 
         $this->pdo->exec($sql);
-        $this->addTeacher("Sebastian Tegel", "sebbe@tegel_rules.se", 1);
-        $this->addTeacher("Stefan Holmberg", "stefan.holmberg@systementor.se", 2);
+        if (!$this->getTeacherByName("Sebastian Tegel")) {
+            $this->addTeacher("Sebastian Tegel", "sebbe@tegelrules.se", 1);
+        }
+        if (!$this->getTeacherByName("Stefan Holmberg")) {
+            $this->addTeacher("Stefan Holmberg", "stefan.holmberg@systementor.se", 2);
+        }
 
         $sql = "CREATE TABLE IF NOT EXISTS `helplist` (
             `Id` INT AUTO_INCREMENT NOT NULL,
@@ -250,11 +201,13 @@ class DBContext
             `CourseID`INT NOT NULL,
             `Question` varchar(400) NOT NULL,
             `Active` BOOLEAN DEFAULT 1,
-            PRIMARY KEY (`id`),
-            FOREIGN KEY (CourseID) REFERENCES courses(Id) 
+            PRIMARY KEY (`Id`),
+            FOREIGN KEY (CourseID) REFERENCES courses(Id)
             ) ";
 
         $this->pdo->exec($sql);
+
+        $initialized = true;
     }
 
 

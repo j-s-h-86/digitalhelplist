@@ -19,14 +19,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $HelpRequest->StudentName = $_POST["StudentName"];
     $HelpRequest->Email = $email;
     $HelpRequest->Location = $_POST["Location"];
-    $HelpRequest->Course = $_POST["Course"];
+    $HelpRequest->CourseID = $_POST["Course"];
     $HelpRequest->Question = $_POST["Question"];
     $HelpRequest->Active = 1;
 
 
     $v->field('StudentName')->required()->min_len(3)->must_contain('a-z');
     $v->field('Location')->required()->min_len(3)->must_contain('a-z');
-    $v->field('Question')->required()->min_len(10)->max_len(100)->must_contain('a-z');
+    $v->field('Question')->required()->min_len(5)->max_len(100)->must_contain('a-z');
 
 
     if ($v->is_valid()) {
@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $HelpRequest->StudentName,
             $HelpRequest->Email,
             $HelpRequest->Location,
-            $HelpRequest->Course,
+            $HelpRequest->CourseID,
             $HelpRequest->Question,
             $HelpRequest->Active,
         );
@@ -75,13 +75,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     layout_sidenav($dbContext);
     ?>
     <main>
+        <?php
+        if (isset($_POST['Course'])) {
+            $Courses = $_POST['Course'];
+            switch ($Courses) {
+                case 'Frontend':
+                    $CourseID = 1;
+                    break;
+                case 'Backend':
+                    $CourseID = 2;
+                    break;
+            }
+        }
+        ?>
         <form method="POST">
             <input value="<?php echo $HelpRequest->StudentName ?>" name="StudentName" placeholder="Namn" />
             <input value="<?php echo $HelpRequest->Location ?>" name="Location" placeholder="Plats" />
             <select name="Course" id="Course">
-                <option name="Frontend" value="<?php echo $HelpRequest->Course ?>">
+                <option name=1 value=1>
                     Frontend</option>
-                <option name="Backend" value="<?php echo $HelpRequest->Course ?>">
+                <option name=2 value=2>
                     Backend</option>
             </select>
             <input value="<?php echo $HelpRequest->Question ?>" name="Question" placeholder="Vad har du för problem?" />

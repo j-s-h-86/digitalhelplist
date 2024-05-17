@@ -122,6 +122,10 @@ class UserDatabase
       $userId = $this->auth->admin()->createUser("admin@admin.se", "Hejsan123#", "admin@admin.se");
       $this->auth->admin()->addRoleForUserById($userId, UserRoles::ADMINISTRATOR);
     }
+    if ($this->pdo->query("select * from users where email='sebbe@tegelrules.se'")->rowCount() == 0) {
+      $userId = $this->auth->admin()->createUser("sebbe@tegelrules.se", "Hejsan123#", "sebbe@tegelrules.se");
+      $this->auth->admin()->addRoleForUserById($userId, UserRoles::TEACHER);
+    }
 
   }
 

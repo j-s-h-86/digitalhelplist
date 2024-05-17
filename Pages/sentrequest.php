@@ -32,7 +32,7 @@ layout_header("MI:s digitala hjälplista");
     ?>
     <!------------------main-------------->
     <main>
-        <p>Din förfrågan är skickad du har plats ... i kön.</p>
+        <p>Din förfrågan är skickad!</p>
 
     </main>
 
