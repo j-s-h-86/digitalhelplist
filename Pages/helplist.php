@@ -37,6 +37,8 @@ layout_header("MI:s digitala hjälplista");
 
                 <li value><?php echo $helpRequest->StudentName ?>
                 </li>
+                <!-- <li><?php echo $dbContext->getCourseByName($Id) ?>
+                </li> -->
                 <li><?php echo $helpRequest->Email ?>
                 </li>
                 <li><?php echo $helpRequest->Location ?>

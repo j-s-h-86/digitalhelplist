@@ -8,6 +8,7 @@ require_once ("Pages/layout/footer.php");
 $dbContext = new DBContext();
 $Email = $dbContext->getUsersDatabase()->getAuth()->getUsername();
 $getHelp = $dbContext->getHelpRequest($Email);
+
 ?>
 
 <?php
@@ -33,6 +34,7 @@ layout_header("MI:s digitala hjälplista");
     <!------------------main-------------->
     <main>
         <p>Din förfrågan är skickad!</p>
+        <p>Du har plats nummer <?php echo $dbContext->getPlaceInQueue() ?></p>
 
     </main>
 
